@@ -1,7 +1,7 @@
 import pygame
+from game.components.spaceship import Spaceship
 
 from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
-
 
 class Game:
     def __init__(self):
@@ -11,13 +11,15 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
-        self.game_speed = 10
-        self.x_pos_bg = 0
+        self.game_speed = 10 #Control de movimiento. 
+        self.x_pos_bg = 0 #blit
         self.y_pos_bg = 0
+        self.player = Spaceship()
+        
 
     def run(self):
         # Game loop: events - update - draw
-        self.playing = True
+        self.playing = True #Banderita del bucle
         while self.playing:
             self.events()
             self.update()
@@ -27,25 +29,26 @@ class Game:
 
     def events(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.playing = False
+            if event.type == pygame.QUIT: #La x de la ventana.
+                self.playing = False #Finaliza el bucle. 
 
     def update(self):
-        pass
+        user_input = pygame.key.get_pressed() #Que tecla a presionado.
+        self.player.update(user_input)
 
     def draw(self):
-        self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255))
-        self.draw_background()
-        pygame.display.update()
-        pygame.display.flip()
+        self.clock.tick(FPS) #Unidad de tiempo del juego. #Las contantes van en Mayus.
+        self.screen.fill((255, 255, 255)) #Relleno de la pantalla. #Cod. LGB. #255: Blanco
+        self.draw_background() #Dibujar el fondo.
+        self.player.draw(self.screen)
+        pygame.display.flip() #Fija todo lo que se hace con blit.
 
     def draw_background(self):
         image = pygame.transform.scale(BG, (SCREEN_WIDTH, SCREEN_HEIGHT))
         image_height = image.get_height()
-        self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg))
-        self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height))
+        self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg)) #Dibujo en borrador.
+        self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height)) #Animación.
         if self.y_pos_bg >= SCREEN_HEIGHT:
-            self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height))
-            self.y_pos_bg = 0
-        self.y_pos_bg += self.game_speed
+            self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height)) #Imegen que se superpone.
+            self.y_pos_bg = 0 #Reseteo de la posición en y. 
+        self.y_pos_bg += self.game_speed #Control de movimiento. 
