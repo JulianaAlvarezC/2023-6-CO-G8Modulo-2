@@ -2,7 +2,7 @@
 from pygame.sprite import Sprite
 import pygame
 
-from game.utils.constants import SCREEN_HEIGHT, SPACESHIP, SCREEN_WIDTH
+from game.utils.constants import SCREEN_HEIGHT, SPACESHIP, SCREEN_WIDTH, BOUNDARY_SOUND, APPEARANCE_SOUND
 
 class Spaceship(Sprite): #clase padre, como img.
     SHIP_WIDTH = 40 #Ancho de la nave.
@@ -47,11 +47,15 @@ class Spaceship(Sprite): #clase padre, como img.
     def check_boundaries(self):
         if self.rect.top < 0: #Superior
             self.rect.top = 0
+            pygame.mixer.Sound(BOUNDARY_SOUND).play()
         elif self.rect.bottom > SCREEN_HEIGHT: #Inferior
             self.rect.bottom = SCREEN_HEIGHT
+            pygame.mixer.Sound(BOUNDARY_SOUND).play()
         if self.rect.right < 0: #Derecha
             self.rect.left = SCREEN_WIDTH
+            pygame.mixer.Sound(APPEARANCE_SOUND).play()
         elif self.rect.left > SCREEN_WIDTH: #Izquierda
             self.rect.right = 0
+            pygame.mixer.Sound(APPEARANCE_SOUND).play()
         
     

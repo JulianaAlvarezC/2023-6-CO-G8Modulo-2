@@ -30,3 +30,12 @@ ENEMY_1 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/enemy_1.png"))
 ENEMY_2 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/enemy_2.png"))
 
 FONT_STYLE = 'freesansbold.ttf'
+
+# Sound Constants
+#SOUND_DIR = os.path.join(os.path.dirname(__file__), "..", "sounds")
+SOUND_DIR = os.path.join("game", "sounds")
+
+BACKGROUND_MUSIC = os.path.join(SOUND_DIR, "background_sound.wav")
+
+BOUNDARY_SOUND = os.path.join(SOUND_DIR, "boundary.wav")
+APPEARANCE_SOUND = os.path.join(SOUND_DIR, "appearance.wav")

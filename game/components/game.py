@@ -1,11 +1,14 @@
 import pygame
-from game.components.spaceship import Spaceship
 
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.components.spaceship import Spaceship
+from game.utils.constants import BACKGROUND_MUSIC, BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init() #musica.
+        pygame.mixer.music.load(BACKGROUND_MUSIC)
+        pygame.mixer.music.play(-1)
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -15,7 +18,6 @@ class Game:
         self.x_pos_bg = 0 #blit
         self.y_pos_bg = 0
         self.player = Spaceship()
-        
 
     def run(self):
         # Game loop: events - update - draw
