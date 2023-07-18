@@ -1,6 +1,7 @@
 import random
 import pygame
 from pygame.sprite import Sprite
+from game.components.bullets.bullet import Bullet
 
 from game.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH, ENEMY_1, ENEMY_2
 
@@ -9,25 +10,28 @@ class Enemy(Sprite):
     SHIP_HEIGHT = 60
     X_POS = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
     Y_POS = 20
-    SPEED_Y = 1
+    SPEED_Y = 8
     SPEED_X = 5
     MOV_X = {0: 'left', 1: 'right'}
-    def __init__(self):
-        #self.image = ENEMY_1
-        #self.image = pygame.transform.scale(self.image,(self.SHIP_WIDTH, self.SHIP_WIDTH))
-        image_choices = [ENEMY_1, ENEMY_2]
-        self.image = pygame.transform.scale(random.choice(image_choices),(self.SHIP_WIDTH, self.SHIP_HEIGHT))
+    IMAGE = {1: ENEMY_1, 2: ENEMY_2}
+    
+    def __init__(self, image = 1, speed_x = SPEED_X, speed_y = SPEED_Y, move_x_for = [30, 100]): #puedo enviar o no estos atributos
+        self.image = self.IMAGE[image]
+        self.image = pygame.transform.scale(self.image,(self.SHIP_WIDTH, self.SHIP_WIDTH))
         self.rect = self.image.get_rect()
         self.rect.x = self.X_POS[random.randint(0,10)]
         self.rect.y = self.Y_POS
-        self.speed_y = self.SPEED_Y
-        self.speed_x = self.SPEED_X
+        self.speed_y = speed_y
+        self.speed_x = speed_x
         self.movement_x = self.MOV_X[random.randint(0,1)]
-        self.move_x_for = random.randint(30,100)
+        self.move_x_for = random.randint(move_x_for[0], move_x_for[1])
+        self.type = "enemy"
         self.index = 0
+        self.shooting_time = random.randint(30, 50) #cada cuanto tiempo debe disparar 
         
-    def update(self, ships):
+    def update(self, ships, game):
         self.rect.y += self.speed_y
+        self.shoot(game.bullet_manager) #hacemos disparar
 
         if self.movement_x == 'left':
             self.rect.x -= self.speed_x
@@ -51,6 +55,12 @@ class Enemy(Sprite):
             self.movement_x = 'right'
             self.index=0
     
+    def shoot(self, bullet_manager):
+        current_time = pygame.time.get_ticks() #cuantos ticks han pasado ene el juego
+        if self.shooting_time <= current_time: #tiempo de disparar
+            bullet = Bullet(self) #objeto de tipo bullet
+            bullet_manager.add_bullet(bullet) 
+            self.shooting_time += random.randint(30, 50) #luego de un tiempo vuelva a disparar
 
             
 

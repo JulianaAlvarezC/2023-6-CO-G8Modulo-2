@@ -1,5 +1,7 @@
 import pygame
+from game.components.bullets.bullet_manager import BulletManager
 from game.components.enemies.enemy_manager import EnemyManager
+#from game.components.life.life import Life
 
 from game.components.spaceship import Spaceship
 from game.utils.constants import BACKGROUND_MUSIC, BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
@@ -10,6 +12,7 @@ class Game:
         pygame.mixer.init() #musica.
         pygame.mixer.music.load(BACKGROUND_MUSIC) #Carga un archivo de música para reproducirlo
         pygame.mixer.music.play(-1) #Reproduce la musica en bucle.
+        pygame.mixer.music.set_volume(0.2)
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -20,6 +23,8 @@ class Game:
         self.y_pos_bg = 0
         self.player = Spaceship()
         self.enemy_manager = EnemyManager()
+        self.bullet_manager = BulletManager()
+        #self.life = Life(total_lives=3)
 
     def run(self):
         # Game loop: events - update - draw
@@ -38,8 +43,10 @@ class Game:
 
     def update(self):
         user_input = pygame.key.get_pressed() #Que tecla a presionado.
-        self.player.update(user_input)
-        self.enemy_manager.update()
+        self.player.update(user_input, self)
+        self.enemy_manager.update(self)
+        self.bullet_manager.update(self)
+        #self.life.update(self)
 
     def draw(self):
         self.clock.tick(FPS) #Unidad de tiempo del juego. #Las contantes van en Mayus.
@@ -47,6 +54,8 @@ class Game:
         self.draw_background() #Dibujar el fondo.
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
+        self.bullet_manager.draw(self.screen)
+        #self.life.draw(self.screen)
         pygame.display.flip() #Fija todo lo que se hace con blit.
 
     def draw_background(self):

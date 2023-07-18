@@ -35,6 +35,7 @@ FONT_STYLE = 'freesansbold.ttf'
 SOUND_DIR = os.path.join("game", "sounds")
 
 BACKGROUND_MUSIC = os.path.join(SOUND_DIR, "background_sound.wav")
-#ADD_ENEMY_SOUND = os.path.join(SOUND_DIR, "appearance.wav")
-#BOUNDARY_SOUND = os.path.join(SOUND_DIR, "boundary.wav")
+SHOOT_SOUND = os.path.join(SOUND_DIR, "laser_shot.wav")
+ENEMY_APPEAR_SOUND = os.path.join(SOUND_DIR, "appearance.wav")
+BOUNDARY_SOUND = os.path.join(SOUND_DIR, "boundary.wav")
 #APPEARANCE_SOUND = os.path.join(SOUND_DIR, "appearance.wav")
