@@ -7,30 +7,28 @@ class BulletManager:
         self.enemy_bullets = [] #Guarda las balas del enemigo.
     
     def update(self, game):
+        player_dead = False 
+        
         for bullet in self.enemy_bullets:
             bullet.update(self.enemy_bullets)
             if bullet.rect.colliderect(game.player.rect) and bullet.owner == "enemy":
                 self.enemy_bullets.remove(bullet)
-                game.enemy_manager.remove_enemy()
                 game.playing = False
+                game.death_score += 1 
+                game.player.player_dead = True 
                 pygame.time.delay(2000)
-                break
+                
 
         for bullet in self.bullets:
             bullet.update(self.bullets)
             for enemy in game.enemy_manager.enemies:
                 if bullet.rect.colliderect(enemy.rect) and bullet.owner == "player":
+                    game.enemy_manager.enemies.remove(enemy)
                     self.bullets.remove(bullet)
-                    game.enemy_manager.remove_enemy(enemy)
-                    break
-
-        #for bullet in self.enemy_bullets: #bucle que recorre la lista
-            #bullet.update(self.enemy_bullets) #se vaya dibujando las balas del enemigo.
-            #if bullet.rect.colliderect(game.player.rect) and bullet.owner == "enemy": #colision #acceso al player
-                #self.enemy_bullets.remove(bullet)
-                #game.playing = False #porque hubo colision y murió, acabó el juego
-                #pygame.time.delay(2000) #pausa (2000 milis)
-                #break
+                    game.score += 100
+                    
+        if not game.playing:
+            game.player.player_dead = False
                 
     def draw(self, screen):
         for bullet in self.enemy_bullets:#recorrer 
@@ -44,3 +42,9 @@ class BulletManager:
             self.enemy_bullets.append(bullet) #entonces le agg balas
         elif bullet.owner == "player":
             self.bullets.append(bullet)
+    
+    #def check_player_collision(self, player_rect):
+        #for bullet in self.enemy_bullets:
+            #if bullet.rect.colliderect(player_rect) and bullet.owner == "enemy":
+                #return True
+        #return False

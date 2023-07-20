@@ -21,6 +21,8 @@ class Spaceship(Sprite): #clase padre, como img.
         self.bullet_manager = BulletManager()
         self.shooting_delay = 0  # Variable para controlar el tiempo entre disparos
         self.shooting_cooldown = 0
+        self.is_shooting = False
+        #self.player_dead = False ######
         
     def update(self, user_input, game): #Teclas que se están usando para cambiar la posicion.
         if user_input[pygame.K_LEFT]: #Con el if, se combinan las teclas.
@@ -31,11 +33,10 @@ class Spaceship(Sprite): #clase padre, como img.
             self.move_up()
         if user_input[pygame.K_DOWN]:
             self.move_down()
-        if user_input[pygame.K_SPACE] and not self.is_shooting:  # Verificar si se presiona la tecla ESPACIO y no se está disparando actualmente
+        if user_input[pygame.K_SPACE] and not self.is_shooting:  #Verificar si se presiona la tecla ESPACIO y no se está disparando actualmente
             self.shoot(game.bullet_manager)
-            self.is_shooting = True  # Establecer el indicador de disparo a True
-
-        if not user_input[pygame.K_SPACE]:  # Verificar si se suelta la tecla ESPACIO
+            self.is_shooting = True  #Establece la banderita de disparo a True
+        if not user_input[pygame.K_SPACE]:  #Verifica si se suelta la tecla ESPACIO
             self.is_shooting = False 
     
     def draw(self, screen):
@@ -66,10 +67,14 @@ class Spaceship(Sprite): #clase padre, como img.
     def shoot(self, bullet_manager):
         current_time = pygame.time.get_ticks()  # Obtener el tiempo actual en milisegundos
         if current_time - self.shooting_delay > self.shooting_cooldown:  # Verificar si ha pasado suficiente tiempo para disparar
-            bullet = Bullet(self)  # Crea una instancia de la clase Bullet con la nave como propietario
+            bullet = Bullet(self)  
             bullet_manager.add_bullet(bullet)  # Agrega la bala al BulletManager
             pygame.mixer.Sound(SHOOT_SOUND).play()
             self.shooting_delay = current_time 
+    
+    #def reset_player(self):
+        #self.player.rect.x = Spaceship.X_POS
+        #self.player.rect.y = Spaceship.Y_POS
     
 
         
